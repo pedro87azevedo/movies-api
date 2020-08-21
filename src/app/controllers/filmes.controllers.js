@@ -12,7 +12,17 @@ class Filme {
                 res.status(201).send({ message: "Filme criado com sucesso no Banco de Dados", filme: data })
             }
         })
+
     }
-    
+
+    visualizarFilmes(req, res){
+        filmeschema.find({}, (err, data) => {
+            if (err) {
+                res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
+            }else {
+                res.status(200).send({ message: "Todos os filmes foram recuperados com sucesso", filmes: data })
+            }
+        })
+    }
 }
 module.exports = new Filme()
