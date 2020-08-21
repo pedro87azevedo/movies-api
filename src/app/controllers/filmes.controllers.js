@@ -24,5 +24,17 @@ class Filme {
             }
         })
     }
+
+    visualizarUmFilme(req, res){
+        const nome = req.params.nome
+
+        filmeschema.find({ nome: nome }, (err, data) => {
+            if (err) {
+                res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
+            }else {
+                res.status(200).send({ message: `Filme ${nome} foi recuperado com sucesso`, filme: data })
+            }
+        })
+    }
 }
 module.exports = new Filme()
