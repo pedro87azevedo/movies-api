@@ -57,13 +57,25 @@ class Filme {
     }
 
     atualizarUmFilme(req, res) {
-        const nome = req.params.nome
+        const nomeDoFilmeParaSerAtualizado = req.params.nome
+        const novoNomeDoFilme = req.body.nome
 
-        filmeschema.updateOne({ nome: nome }, { $unset: req.body.nome},  (err, data) => {
+        filmeschema.updateOne({ nome: nomeDoFilmeParaSerAtualizado }, { $set: req.body },  (err, data) => {
             if (err) {
-                res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
+                res.status(500).send({ message: "Houve um erro ao processar sua atualização", error: err })
             }else {
-                res.status(200).send({ message: `Filme ${nome} foi atualizado com sucesso`, })
+                if(data.n > 0) {
+                    filmeschema.findOne({ nome: novoNomeDoFilme }, (error, result) => {
+                        if (err) {
+                            res.status(500).send({ message: "Houve um erro ao processar sua busca no filme atualizado", error: err })
+                } else {
+                    res.status(200).send({ message: `Filme ${nomeDoFilmeParaSerAtualizado} teve seu nome atualizado 
+                    para ${novoNomeDoFilme}`, filme: result})
+                        }
+                })
+            } 
+            
+                
             }
         }) 
     }
