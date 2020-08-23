@@ -28,9 +28,8 @@ const atoresSchema = new Schema({
     }],
 
     filmes: [{ 
-        type: String, 
-        required: true,
-        trim: true
+        type: Schema.Types.ObjectId, 
+        ref: 'filmeschema'
 
   }]
 },

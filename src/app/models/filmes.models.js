@@ -17,7 +17,7 @@ const FilmeSchema = new Schema({
     },
     maior18: {
         type: Boolean,
-        required: true,
+        required: false,
     }
 },
     {
