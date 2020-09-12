@@ -6,6 +6,10 @@ const FilmeSchema = new Schema({
         required: true,
         trim: true
     },
+    imagem: {
+        type: String,
+        trim: true
+    },
     genero: {
         type: String,
         required: false,

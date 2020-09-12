@@ -6,6 +6,10 @@ const atoresSchema = new Schema({
         required: true,
         trim: true
     },
+    imagem: {
+        type: String,
+        trim: true
+    },
     idade: {
         type: Number,
         required: false        
