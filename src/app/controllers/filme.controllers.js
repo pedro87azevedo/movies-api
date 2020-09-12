@@ -1,4 +1,4 @@
-const filmeschema = require('../models/filme.models')
+const filme = require('../models/filme.models')
 
 /**definir campos de busca
  * funçao para definir quais campos devem ser buscados ao realizar um find no Banco de Dados
@@ -57,13 +57,13 @@ class Filme {
             res.status(400).send({message: "O nome do filme deve ser obrigatoriamente preenchido"})
         }
 
-        filme.find({ nome: nomeFilme })
+        filme.findOne({ nome: nomeFilme })
             .populate('ator', { nome: 1, imagem: 1 })
             .exec((err, data) => {
                 if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
                 }else {
-                    if (data.lenght <= 0 ) {
+                    if (data.lenght == null ) {
                         res.status(200).send({ message: `Filme não encontrado na base de dados` })
                     } else {
                         res.status(200).send({ message: `Filme ${nome} foi recuperado com sucesso`, data: data })
