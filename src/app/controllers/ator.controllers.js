@@ -1,5 +1,5 @@
-const atoresSchema = require('./../models/atores.models')
-const { populate } = require('./../models/atores.models')
+const atoresSchema = require('../models/ator.models')
+const { populate } = require('../models/ator.models')
 
 class Ator {
     
@@ -63,13 +63,13 @@ class Atores {
 
     //Medoto para inserir um dado no Banco de Dados
     criarAtores(req, res){
-        const body = req.body
+        const reqBody = req.body
 
-        atoresSchema.create(body, (err, data) => {
+        atoresSchema.create(reqBody, (err, data) => {
             if(err){
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
             }else{
-                res.status(201).send({ message: "Atores criado com sucesso no Banco de Dados", atores: data })
+                res.status(201).send({ message: "Atores criado com sucesso no Banco de Dados", data: data })
             }
         })
     }

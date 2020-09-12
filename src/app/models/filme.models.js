@@ -8,6 +8,7 @@ const FilmeSchema = new Schema({
     },
     imagem: {
         type: String,
+        required: true,
         trim: true
     },
     genero: {

@@ -1,4 +1,4 @@
-const filmeschema = require('./../models/filmes.models')
+const filmeschema = require('../models/filme.models')
 
 /**definir campos de busca
  * funçao para definir quais campos devem ser buscados ao realizar um find no Banco de Dados
@@ -32,19 +32,25 @@ class Filme {
 
     /* Método para visualizar todos os dados do banco de dados, utilizando Query Params para 
     definir o valor a ser passado na funçao para definir os campos que devem ser buscados */
-    visualizarFilmes(req, res){
-        const campos = req.query.campos
+    buscarTodosOsFilmes(req, res){
+
+        filme.find({})
         
-        filmeschema.find({}, definirCamposDeBusca(campos), (err, data) => {
+        .populate('ator', { nome: 1, imagem: 1 })
+        .sort({ nome: 1})
+        .exec ((err, data) => {
             if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
             }else {
-                res.status(200).send({ message: "Todos os filmes foram recuperados com sucesso", filmes: data })
+                if(data.lenght <= 0) {
+                    res.status(200).send({ message: "Nào existem filmes cadastrados na base de dados", filmes: data })
+                }
+                res.status(200).send({ message: "Todos os filmes foram recuperados com sucesso", data: data })
             }
         })
     }
 
-    visualizarUmFilme(req, res){
+    buscarUmFilme(req, res){
         const nome = req.params.nome
 
         filmeschema.find({ nome: nome }, (err, data) => {
