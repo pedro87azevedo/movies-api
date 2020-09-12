@@ -21,7 +21,7 @@ class Filme {
     criarFilme(req, res){
         const body = req.body
 
-        filmeschema.create(body, (err, data) => {
+        filme.create(body, (err, data) => {
             if(err){
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
             }else{
@@ -50,16 +50,26 @@ class Filme {
         })
     }
 
-    buscarUmFilme(req, res){
-        const nome = req.params.nome
+    buscarUmFilmePeloNome(req, res){
+        const { nomeFilme } = req.params
 
-        filmeschema.find({ nome: nome }, (err, data) => {
-            if (err) {
+        if(nomeFilme == undefined || nomeFilme == 'null') {
+            res.status(400).send({message: "O nome do filme deve ser obrigatoriamente preenchido"})
+        }
+
+        filme.find({ nome: nomeFilme })
+            .populate('ator', { nome: 1, imagem: 1 })
+            .exec((err, data) => {
+                if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
-            }else {
-                res.status(200).send({ message: `Filme ${nome} foi recuperado com sucesso`, filme: data })
-            }
-        })
+                }else {
+                    if (data.lenght <= 0 ) {
+                        res.status(200).send({ message: `Filme não encontrado na base de dados` })
+                    } else {
+                        res.status(200).send({ message: `Filme ${nome} foi recuperado com sucesso`, data: data })
+                    }
+                }
+            })
     }
 
     atualizarUmFilme(req, res) {
