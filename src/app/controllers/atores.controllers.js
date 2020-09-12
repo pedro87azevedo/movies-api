@@ -1,5 +1,49 @@
 const atoresSchema = require('./../models/atores.models')
+const { populate } = require('./../models/atores.models')
 
+class Ator {
+    
+    buscarTodosOsAtores (req, res){
+        atores.find({}, {filmes:0})
+        .sort({ nome: 1 })
+        .exec((err, data) => {
+            if (err) {
+                res.status(500).send({ message: "Houve um erro ao processar a sua requisição", error: err })
+            }else {
+                if (data.lenght <= 0) {
+                    res.status(200).send({ message: "Não foram encontrados atores para exibir" })
+                } else {
+                    res.status(200).send({ message: "Atores recuperados com sucesso", data: data })
+                }
+            }
+        })
+    } 
+
+
+    buscarUmAtorPeloNome (req, res) {
+        const { nomeAtor } = req.params
+
+        if (nomeAtor == undefined || nomeAtor == 'null') {
+            res.status(400).send({ message: "O nome do ator deve obriagotiramente ser preenchido"})
+        }
+
+        ator.find({nome: nomeAtor})
+        populate('filmes', {nome: 1, imagem: 1})
+        .exec((err, data) => {
+            if (err) {
+                res.status(500).send({ message: "Houve um erro ao processar a requisição", error, err})
+            } else {
+                if (data.lenght <= 0) {
+                    res.status(200).send({message: `O ator ${nomeAtor} nào existe no banco de dados`})
+                } else if (data('filmes').lenght <= 0) {
+                    res.status(200).send({message: `O ator ${nomeAtor} não possui nenhum cadastro`})
+                } else {
+                    res.status(200).send({message: `O ator ${nomeAtor} possui filmes cadastrados`, data: data})
+                }
+            }
+        })
+    }
+}
 /**definir campos de busca
  * funçao para definir quais campos devem ser buscados ao realizar um find no Banco de Dados
  * O parametro campos é obrigatorio
