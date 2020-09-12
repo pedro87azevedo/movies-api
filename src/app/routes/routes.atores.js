@@ -9,4 +9,6 @@ route.get('/visualizarUm/:nome', Atores.visualizarUmAtor)
 route.put('/atualizarUm/:nome', Atores.atualizarUmAtor)
 route.delete('/apagarUm/:nome', Atores.apagarUmAtor)
 
+
+
 module.exports = route
