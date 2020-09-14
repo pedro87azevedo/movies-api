@@ -16,6 +16,11 @@ const FilmeSchema = new Schema({
         required: false,
         trim: true
     },
+    sinopse: {
+        type: String,
+        required: false,
+        trim: true
+    },
     ano: {
         type: Number,
         required: false,

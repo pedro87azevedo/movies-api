@@ -8,6 +8,7 @@ const atoresSchema = new Schema({
     },
     imagem: {
         type: String,
+        required: false,
         trim: true
     },
     idade: {
