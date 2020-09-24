@@ -7,6 +7,7 @@ route.get('/listarTodos', Filme.buscarTodosOsFilmes)
 route.get('/listarUm/:nomeFilme', Filme.buscarUmFilmePeloNome)
 route.put('/atualizarUm/:nome', Filme.atualizarUmFilme)
 route.delete('/apagarUm/:nome', Filme.apagarUmFilme)
+route.get('/validarNomeFilme', Filme.validarNomeFilme)
 
 
 module.exports = route
