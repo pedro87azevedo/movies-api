@@ -25,9 +25,14 @@ const FilmeSchema = new Schema({
         type: Number,
         required: false,
     },
-    maior18: {
-        type: Boolean,
+    classificacao_indicativa: {
+        type: String,
         required: false,
+    },
+    ator: {
+        type: Schema.Types.ObjectId,
+        ref: 'atoresSchema', 
+        required: true
     }
 },
     {

@@ -66,7 +66,7 @@ class Filme {
                     if (data == null ) {
                         res.status(200).send({ message: `Filme não encontrado na base de dados` })
                     } else {
-                        res.status(200).send({ message: `Filme ${nomefilme} foi recuperado com sucesso`, data: data })
+                        res.status(200).send({ message: `Filme ${nomeFilme} foi recuperado com sucesso`, data: data })
                     }
                 }
             })

@@ -15,36 +15,29 @@ const atoresSchema = new Schema({
         type: Number,
         required: false        
     },
-    localidade: [{
-        cidade: {
-            type: String,
-            required: false,
-            trim:true
-        },
-        estado: {
-            type: String, 
-            required:false,
-            trim: true
-        },
-        cep: {
-            type: Number,
-            trim:true
-        }
-    }],
+    nacionalidade: {
+        type: String,
+        required: false        
+    },
+    biografia: {
+        type: String,
+        required: false        
+    },
+    data_nascimento: {
+        type: Date,
+        required: false        
+    },
 
     filmes: [{ 
         type: Schema.Types.ObjectId, 
-        ref: 'filmeschema'
+        ref: 'Filme'
 
   }]
 },
 {
     timestamps: true,
     versionkey: false
-})
-   
-
-  
+}) 
 
 
 module.exports = model('atoresSchema', atoresSchema)
