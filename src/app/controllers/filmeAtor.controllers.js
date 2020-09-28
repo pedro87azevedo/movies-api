@@ -1,5 +1,5 @@
-const filmeSchema = require('./../models/filmes.models')
-const atoresSchema = require('./../models/atores.models')
+const filmeSchema = require('./../models/filme.models')
+const atoresSchema = require('./../models/ator.models')
 
 class filmeAtor {
 

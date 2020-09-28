@@ -1,5 +1,49 @@
-const atoresSchema = require('./../models/atores.models')
+const atoresSchema = require('../models/ator.models')
+const { populate } = require('../models/ator.models')
 
+class Ator {
+    
+    buscarTodosOsAtores (req, res){
+        atores.find({}, {filmes:0})
+        .sort({ nome: 1 })
+        .exec((err, data) => {
+            if (err) {
+                res.status(500).send({ message: "Houve um erro ao processar a sua requisição", error: err })
+            }else {
+                if (data.lenght <= 0) {
+                    res.status(200).send({ message: "Não foram encontrados atores para exibir" })
+                } else {
+                    res.status(200).send({ message: "Atores recuperados com sucesso", data: data })
+                }
+            }
+        })
+    } 
+
+
+    buscarUmAtorPeloNome (req, res) {
+        const { nomeAtor } = req.params
+
+        if (nomeAtor == undefined || nomeAtor == 'null') {
+            res.status(400).send({ message: "O nome do ator deve obriagotiramente ser preenchido"})
+        }
+
+        ator.find({nome: nomeAtor})
+        populate('filmes', {nome: 1, imagem: 1})
+        .exec((err, data) => {
+            if (err) {
+                res.status(500).send({ message: "Houve um erro ao processar a requisição", error, err})
+            } else {
+                if (data.lenght <= 0) {
+                    res.status(200).send({message: `O ator ${nomeAtor} nào existe no banco de dados`})
+                } else if (data('filmes').lenght <= 0) {
+                    res.status(200).send({message: `O ator ${nomeAtor} não possui nenhum cadastro`})
+                } else {
+                    res.status(200).send({message: `O ator ${nomeAtor} possui filmes cadastrados`, data: data})
+                }
+            }
+        })
+    }
+}
 /**definir campos de busca
  * funçao para definir quais campos devem ser buscados ao realizar um find no Banco de Dados
  * O parametro campos é obrigatorio
@@ -19,13 +63,13 @@ class Atores {
 
     //Medoto para inserir um dado no Banco de Dados
     criarAtores(req, res){
-        const body = req.body
+        const reqBody = req.body
 
-        atoresSchema.create(body, (err, data) => {
+        atoresSchema.create(reqBody, (err, data) => {
             if(err){
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
             }else{
-                res.status(201).send({ message: "Atores criado com sucesso no Banco de Dados", atores: data })
+                res.status(201).send({ message: "Atores criado com sucesso no Banco de Dados", data: data })
             }
         })
     }
@@ -86,6 +130,23 @@ class Atores {
                 res.status(500).send({ message: "Houve um erro ao apagar um", error: err})
             }else {
                 res.status(200).send({ message: `Os atores ${nomeDoAtorParaSerApagado} foram apagados com sucesso` })
+            }
+        })
+    }
+
+    validarNomeAtor(req, res) {
+        const nome = req.query.nome.replace(/%20/g, " ")
+        
+        atoresSchema.find({ nome: { '$regex': `^${nome}$`, '$options': 'i' } }, (err, result) =>{
+            if (err) {
+                res.status(500).send({ message: "Houve um erro ao processar a sua requisição", error: err})
+            }else {
+                if (result.lenght > 0) {
+                    res.status(200).send({ message: "Já existe um ator cadastrado com esse nome", data: result.lenght })
+                }else {
+                    res.status(200).send({ message: "Ator disponível", data: result.lenght})
+                }
+                
             }
         })
     }

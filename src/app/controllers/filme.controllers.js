@@ -1,4 +1,4 @@
-const filmeschema = require('./../models/filmes.models')
+const filme = require('../models/filme.models')
 
 /**definir campos de busca
  * funçao para definir quais campos devem ser buscados ao realizar um find no Banco de Dados
@@ -21,7 +21,7 @@ class Filme {
     criarFilme(req, res){
         const body = req.body
 
-        filmeschema.create(body, (err, data) => {
+        filme.create(body, (err, data) => {
             if(err){
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
             }else{
@@ -32,28 +32,44 @@ class Filme {
 
     /* Método para visualizar todos os dados do banco de dados, utilizando Query Params para 
     definir o valor a ser passado na funçao para definir os campos que devem ser buscados */
-    visualizarFilmes(req, res){
-        const campos = req.query.campos
+    buscarTodosOsFilmes(req, res){
+
+        filme.find({})
         
-        filmeschema.find({}, definirCamposDeBusca(campos), (err, data) => {
+        .populate('ator', { nome: 1, imagem: 1 })
+        .sort({ nome: 1})
+        .exec ((err, data) => {
             if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
             }else {
-                res.status(200).send({ message: "Todos os filmes foram recuperados com sucesso", filmes: data })
+                if(data.lenght <= 0) {
+                    res.status(200).send({ message: "Nào existem filmes cadastrados na base de dados", filmes: data })
+                }
+                res.status(200).send({ message: "Todos os filmes foram recuperados com sucesso", data: data })
             }
         })
     }
 
-    visualizarUmFilme(req, res){
-        const nome = req.params.nome
+    buscarUmFilmePeloNome(req, res){
+        const { nomeFilme } = req.params
 
-        filmeschema.find({ nome: nome }, (err, data) => {
-            if (err) {
+        if(nomeFilme == undefined || nomeFilme == 'null') {
+            res.status(400).send({message: "O nome do filme deve ser obrigatoriamente preenchido"})
+        }
+
+        filme.findOne({ nome: nomeFilme })
+            .populate('ator', { nome: 1, imagem: 1 })
+            .exec((err, data) => {
+                if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
-            }else {
-                res.status(200).send({ message: `Filme ${nome} foi recuperado com sucesso`, filme: data })
-            }
-        })
+                }else {
+                    if (data == null ) {
+                        res.status(200).send({ message: `Filme não encontrado na base de dados` })
+                    } else {
+                        res.status(200).send({ message: `Filme ${nomeFilme} foi recuperado com sucesso`, data: data })
+                    }
+                }
+            })
     }
 
     atualizarUmFilme(req, res) {
@@ -86,6 +102,23 @@ class Filme {
                 res.status(500).send({ message: "Houve um erro ao apagar um", error: err})
             }else {
                 res.status(200).send({ message: `O filme ${nomeDoFilmeParaSerApagado} foi apagado com sucesso` })
+            }
+        })
+    }
+
+    validarNomeFilme(req, res) {
+        const nome = req.query.nome.replace(/%20/g, " ")
+        
+        filme.find({ nome: { '$regex': `^${nome}$`, '$options': 'i' } }, (err, result) =>{
+            if (err) {
+                res.status(500).send({ message: "Houve um erro ao processar a sua requisição", error: err})
+            }else {
+                if (result.lenght > 0) {
+                    res.status(200).send({ message: "Já existe um filme cadastrado com esse nome", data: result.lenght })
+                }else {
+                    res.status(200).send({ message: "Filme disponível", data: result.lenght})
+                }
+                
             }
         })
     }
