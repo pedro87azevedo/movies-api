@@ -137,7 +137,7 @@ class Atores {
     validarNomeAtor(req, res) {
         const nome = req.query.nome.replace(/%20/g, " ")
         
-        ator.find({ nome: { '$regex': `^${nome}$`, '$options': 'i' } }, (err, result) =>{
+        atoresSchema.find({ nome: { '$regex': `^${nome}$`, '$options': 'i' } }, (err, result) =>{
             if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar a sua requisição", error: err})
             }else {
