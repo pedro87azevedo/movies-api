@@ -143,10 +143,10 @@ class Atores {
             if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar a sua requisição", error: err })
             } else {
-                if (result.lenght > 0) {
+                if (result.length > 0) {
                     res.status(200).send({ message: "Já existe um ator cadastrado com esse nome", data: result.length })
-                } else {
-                    res.status(200).send({ message: "Ator disponível", data: result.length })
+                }else {
+                    res.status(200).send({ message: "Ator disponível", data: result.length})
                 }
 
             }
