@@ -146,7 +146,7 @@ class Atores {
                 if (result.lenght > 0) {
                     res.status(200).send({ message: "Já existe um ator cadastrado com esse nome", data: result.length })
                 } else {
-                    res.status(200).send({ message: "Ator disponível", data: result.length })
+                    res.status(200).send({ message: "Ator disponível", data: result.lengh })
                 }
 
             }
