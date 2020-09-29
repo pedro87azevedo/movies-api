@@ -21,7 +21,7 @@ const atoresSchema = new Schema({
     },
     biografia: {
         type: String,
-        required: false        
+        required: true        
     },
     data_nascimento: {
         type: Date,
