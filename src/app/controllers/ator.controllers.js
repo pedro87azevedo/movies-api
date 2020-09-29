@@ -95,7 +95,7 @@ class Atores {
             if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
             } else {
-                res.status(200).send({ message: `Atores ${nome} foi recuperado com sucesso`, atores: data })
+                res.status(200).send({ message: `Atores ${nome} foi recuperado com sucesso`, data: data })
             }
         })
     }
