@@ -42,7 +42,7 @@ class Filme {
                 if (err) {
                     res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
                 } else {
-                    if (data.lenght <= 0) {
+                    if (data.length <= 0) {
                         res.status(200).send({ message: "Nào existem filmes cadastrados na base de dados", filmes: data })
                     }
                     res.status(200).send({ message: "Todos os filmes foram recuperados com sucesso", data: data })
@@ -115,7 +115,7 @@ class Filme {
             if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar a sua requisição", error: err })
             } else {
-                if (result.lenght > 0) {
+                if (result.length > 0) {
                     res.status(200).send({ message: "Já existe um filme cadastrado com esse nome", data: result.length })
                 } else {
                     res.status(200).send({ message: "Filme disponível", data: result.length })

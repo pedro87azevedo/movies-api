@@ -10,7 +10,7 @@ class Ator {
                 if (err) {
                     res.status(500).send({ message: "Houve um erro ao processar a sua requisição", error: err })
                 } else {
-                    if (data.lenght <= 0) {
+                    if (data.length <= 0) {
                         res.status(200).send({ message: "Não foram encontrados atores para exibir" })
                     } else {
                         res.status(200).send({ message: "Atores recuperados com sucesso", data: data })
@@ -33,9 +33,9 @@ class Ator {
                 if (err) {
                     res.status(500).send({ message: "Houve um erro ao processar a requisição", error, err })
                 } else {
-                    if (data.lenght <= 0) {
+                    if (data.length <= 0) {
                         res.status(200).send({ message: `O ator ${nomeAtor} nào existe no banco de dados` })
-                    } else if (data('filmes').lenght <= 0) {
+                    } else if (data('filmes').length <= 0) {
                         res.status(200).send({ message: `O ator ${nomeAtor} não possui nenhum cadastro` })
                     } else {
                         res.status(200).send({ message: `O ator ${nomeAtor} possui filmes cadastrados`, data: data })
@@ -89,16 +89,25 @@ class Atores {
     }
 
     visualizarUmAtor(req, res) {
-        const nome = req.params.nome
+        const {nome} = req.params
 
-        atoresSchema.find({ nome: nome }, (err, data) => {
+        if(nome == undefined || nome == 'null'){
+            res.status(400).send({message: "O nome do ator deve ser obrigatoriamente preenchido"})
+        }
+
+        atoresSchema.find({ nome: nome })
+            .populate('filmes', {nome: 1, imagem: 1})
+            .exec((err, data) => {
             if (err) {
                 res.status(500).send({ message: "Houve um erro ao processar sua requisição", error: err })
             } else {
-                res.status(200).send({ message: `Atores ${nome} foi recuperado com sucesso`, data: data })
+                if(data.length <= 0) {
+                    res.status(200).send({ message: `Ator ${nome} não existe no banco de dados`}) 
+                }
+                res.status(200).send({ message: `Atores ${nome} participaram  dos seguintes filmes`, data: data })
             }
         })
-    }
+    }  
 
     atualizarUmAtor(req, res) {
         const nomeDoAtorParaSerAtualizado = req.params.nome
