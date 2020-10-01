@@ -27,13 +27,13 @@ class Ator {
             res.status(400).send({ message: "O nome do ator deve obriagotiramente ser preenchido" })
         }
 
-        ator.find({ nome: nomeAtor })
+        ator.findOne({ nome: nomeAtor })
         populate('filmes', { nome: 1, imagem: 1 })
             .exec((err, data) => {
                 if (err) {
                     res.status(500).send({ message: "Houve um erro ao processar a requisição", error, err })
                 } else {
-                    if (data.length <= 0) {
+                    if (data == null || data == undefined) {
                         res.status(200).send({ message: `O ator ${nomeAtor} nào existe no banco de dados` })
                     } else if (data('filmes').length <= 0) {
                         res.status(200).send({ message: `O ator ${nomeAtor} não possui nenhum cadastro` })
